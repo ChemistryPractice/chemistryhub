@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry Practice Portal</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #27ae60;
+            --bg: #f4f7f6;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--primary);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            width: 100%;
+            padding: 40px 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .filter-container {
+            margin: 30px 0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .filter-btn:hover {
+            background: #ecf0f1;
+        }
+
+        .hub-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            width: 90%;
+            padding: 20px;
+        }
+
+        .hub-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border-top: 5px solid var(--accent);
+        }
+
+        .hub-card.hidden {
+            display: none;
+        }
+
+        .hub-card h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        .hub-card p {
+            font-size: 0.95rem;
+            color: #7f8c8d;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .tag-container {
+            margin: 10px 0;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            background: #eee;
+            padding: 3px 8px;
+            border-radius: 5px;
+            margin-right: 5px;
+            color: #555;
+        }
+
+        .launch-btn {
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+
+        .launch-btn:hover {
+            background: #219150;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Chemistry Resource Hub</h1>
+    <p>Select your course to find relevant practice tools</p>
+</header>
+
+<div class="filter-container">
+    <button class="filter-btn active" onclick="filterSelection('all', event)">All Topics</button>
+    <button class="filter-btn" onclick="filterSelection('hs', event)">HS General Chem</button>
+    <button class="filter-btn" onclick="filterSelection('ap', event)">AP Chemistry</button>
+    <button class="filter-btn" onclick="filterSelection('chem121', event)">Chemistry 121</button>
+    <button class="filter-btn" onclick="filterSelection('chem160', event)">Chemistry 161/2/3</button>
+</div>
+
+<div class="hub-grid">
+    <div class="hub-card" data-courses="ap chem121 chem160">
+        <h3>Chemical Equilibrium</h3>
+        <p>Master ICE tables, Le Chatelier's principle, Kp vs Kc, and solubility product constants (Ksp).</p>
+        <div class="tag-container">
+            <span class="tag">ICE Tables</span>
+            <span class="tag">Ksp</span>
+        </div>
+        <a href="equilibrium.html" class="launch-btn">Open Hub</a>
+    </div>
+
+    <div class="hub-card" data-courses="hs ap chem121 chem160">
+        <h3>Chemical Kinetics</h3>
+        <p>Practice rate laws, collision theory, and integrated rate law calculations for all levels.</p>
+        <div class="tag-container">
+            <span class="tag">Reaction Rates</span>
+            <span class="tag">Half-Life</span>
+        </div>
+        <a href="kinetics.html" class="launch-btn">Open Hub</a>
+    </div>
+
+    <div class="hub-card" data-courses="ap chem121 chem160">
+        <h3>ACS Exam Prep</h3>
+        <p>Comprehensive review materials and practice questions formatted for the ACS standardized exams.</p>
+        <div class="tag-container">
+            <span class="tag">Exam Review</span>
+            <span class="tag">Cumulative</span>
+        </div>
+        <a href="acs_review.html" class="launch-btn">Open Hub</a>
+    </div>
+
+    <div class="hub-card" data-courses="hs chem121">
+        <h3>Atomic Structure & Periodicity</h3>
+        <p>Foundational practice for subatomic particles, isotopes, and periodic trends.</p>
+        <div class="tag-container">
+            <span class="tag">Bohr Model</span>
+            <span class="tag">Trends</span>
+        </div>
+        <a href="#" class="launch-btn">Coming Soon</a>
+    </div>
+</div>
+
+<script>
+    function filterSelection(course, event) {
+        // Update button styles
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        const cards = document.querySelectorAll('.hub-card');
+        
+        cards.forEach(card => {
+            const courseTags = card.getAttribute('data-courses').split(' ');
+            
+            if (course === 'all') {
+                card.classList.remove('hidden');
+            } else if (courseTags.includes(course)) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
